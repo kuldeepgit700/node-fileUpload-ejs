@@ -1,0 +1,19 @@
+<!-- views/index.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>File Upload Example</title>
+</head>
+<body>
+  <h1>Uploaded Files</h1>
+  <ul>
+    <% files.forEach(file => { %>
+      <li><a href="<%= file.path %>"><%= file.filename %></a></li>
+    <% }); %>
+  </ul>
+  <form action="/upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" />
+    <button type="submit">Upload</button>
+  </form>
+</body>
+</html>
