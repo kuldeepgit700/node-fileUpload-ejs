@@ -14,20 +14,30 @@ process.on("uncaughtException", (err) => {
     console.log("UNCAUGHT EXCEPTION, APP SHUTTING NOW!!");
     console.log(err.message, err.name);
     process.exit(1);
-  });
+});
 
-mongoose.connect(process.env.CONNECTION_STRING, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
+
+ console.log('process.env.NODE_ENV',process.env.NODE_ENV);
+ const environment = process.env.NODE_ENV.trim();
+if (environment === 'prod') {
+    env = process.env.CONNECTION_STRING_PROD;
+}else{
+    env = process.env.CONNECTION_STRING_DEV;
+}
+console.log('env', env);
+
+mongoose.connect(env, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 }).then(success => {
     // logger.logInfo('connected!');
     logger.log("info", "connect!");
     logger.debug("The is the home '/' route.");
     console.log('connected!');
-}).catch(err =>{
+}).catch(err => {
     logger.error(err.message);
     logger.debug("The is the home '/' route.");
-   // logger.logInfo(err.message);
+    // logger.logInfo(err.message);
 });
 
 app.set('view engine', 'ejs');
@@ -37,6 +47,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/', uploadRoutes);
 
 app.listen(3000, () => {
-  logger.info("'Server is running on port : 3000");
-  console.log('Server is running on port 3000');
+    logger.info("'Server is running on port : 3000");
+    console.log('Server is running on port 3000');
 });
